@@ -1,0 +1,40 @@
+version: "3"
+services:
+  spotify_app:
+    build: ./app
+    depends_on:
+      - spotify_backend
+    ports:
+      - "9000:3000"
+    restart: always
+    volumes:
+      - ./app:/usr/src/app/
+
+  spotify_backend:
+    build: ./backend
+    depends_on:
+      - spotify_redis
+      - spotify_mongodb
+    ports:
+      - "9001:3001"
+    restart: always
+    volumes:
+      - ./backend:/usr/src/app/
+
+  spotify_redis:
+    image: redis:latest # 4
+    ports:
+      - 6381:6379
+
+  spotify_mongodb:
+    image: mongo:latest # 4.0
+    environment:
+      - MONGO_DATA_DIR=/mongo/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGO_USER="root"
+      - MONGO_PASS="root"
+    volumes:
+      - ./mongo/db:/mongo/db
+    ports:
+      - 27019:27017
+    command: mongod --smallfiles --logpath=/dev/null

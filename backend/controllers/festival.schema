@@ -1,0 +1,42 @@
+{
+  type: string,
+  popularity: float,
+  displayName: string,
+  status: string,
+  performance: []: {
+    displayName: string
+    billingIndex: string
+    billing: string
+    artist: {}
+    id: integer
+  }
+
+  ageRestriction: null,
+  start: {
+    datetime: null,
+    time: null,
+    date: string
+  },
+  end: {
+    datetime: null,
+    time: null,
+    date: string
+  },
+  series: { displayName: string },
+  location:
+   { city: string,
+     lat: float,
+     lng: float },
+  uri: string
+  id: integer,
+  venue:
+   { displayName: string,
+     lat: float,
+     lng: float,
+     metroArea:
+      { displayName: string,
+        country: [Object],
+        uri: string
+        id: integer },
+     uri: null,
+     id: null } }
