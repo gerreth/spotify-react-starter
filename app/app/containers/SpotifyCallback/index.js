@@ -1,7 +1,5 @@
 /**
- *
  * SpotifyCallback
- *
  */
 
 import { combineReducers, compose } from 'redux'
@@ -15,27 +13,24 @@ import { Redirect } from 'react-router'
 import injectReducer from 'utils/injectReducer'
 import injectSaga from 'utils/injectSaga'
 
+import { getHashParams } from 'helper'
+
 import saga from './saga'
 import { initialize, setToken } from './actions'
 import spotifyReducer from './reducer'
+import {
+  spotifyFinishedSelector,
+  spotifyLoadingSelector
+} from './selectors'
 
-import bandsReducer from '../Bands/reducer'
-import festivalsReducer from '../Festivals/reducer'
+import bandsReducer from 'containers/Bands/reducer'
+import festivalsReducer from 'containers/Festivals/reducer'
 
 /* eslint-disable react/prefer-stateless-function */
 export class SpotifyCallback extends React.Component {
-  getHashParams() {
-    let hashParams = {};
-    let e, r = /([^&;=]+)=?([^&;]*)/g
-    let q = window.location.hash.substring(1);
-    while ( e = r.exec(q)) {
-      hashParams[e[1]] = decodeURIComponent(e[2]);
-    }
-    return hashParams
-  }
-
   componentDidMount() {
-    const hashParams = this.getHashParams()
+    const hashParams = getHashParams()
+
     this.props.setToken(hashParams.access_token)
 
     this.props.onInit()
@@ -48,20 +43,27 @@ export class SpotifyCallback extends React.Component {
           <title>SpotifyCallback</title>
           <meta name="description" content="Description of SpotifyCallback" />
         </Helmet>
-        {/*<Redirect to="/"/>*/}
-        SpotifyCallback
+        {this.props.loading &&
+          <span>loading...</span>
+        }
+        {this.props.finished &&
+          <Redirect to="/"/>
+        }
       </div>
     )
   }
 }
 
 SpotifyCallback.propTypes = {
+  finished: PropTypes.bool,
+  loading: PropTypes.bool,
   onInit: PropTypes.func,
   setToken: PropTypes.func
 }
 
 const mapStateToProps = createStructuredSelector({
-
+  finished: spotifyFinishedSelector(),
+  loading: spotifyLoadingSelector()
 })
 
 function mapDispatchToProps(dispatch) {

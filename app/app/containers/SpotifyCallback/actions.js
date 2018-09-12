@@ -3,7 +3,13 @@
  * Spotify callback actions
  *
  */
-import { INITIALIZE, SET_TOKEN } from './constants';
+import { FINALIZE, INITIALIZE, SET_TOKEN } from './constants';
+
+export function finalize() {
+  return {
+    type: FINALIZE,
+  };
+}
 
 export function initialize() {
   return {
