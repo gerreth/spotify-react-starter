@@ -34,14 +34,10 @@ function* load() {
 
   try {
     yield put(getTopBands())
-    const url = `http://localhost:9001/spotify/top-bands?${querystring.stringify({ token })}`
-    const options = {
-      json: true,
-      method: 'GET',
-    }
 
-    topBands = yield fetch(url, options).then(response => response.json())
+    topBands = yield call(topBandsRequest, token)
     topBandNames = topBands.map(band => band.name)
+
     yield put(setTopBands(topBands))
   } catch (error) {
     yield put(setTopBandsError())
@@ -52,16 +48,10 @@ function* load() {
     yield put(getSimilarBands())
 
     const ids = topBands.map(band => band.id)
-    const options = {
-      method: 'post',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ ids })
-    }
 
-    const url = `http://localhost:9001/spotify/similar-bands?${querystring.stringify({ token })}`
-    similarBands = yield fetch(url, options).then(response => response.json())
+    similarBands = yield call(similarBandRequest, token, ids)
 
-    similarBands = similarBands.filter(band => topBandNames.indexOf(band.name) === -1)
+    similarBands = similarBands.filter(band => topBandNames.indexOf(band.name) === -1) // maybe better do this on the backend
     similarBandNames = similarBands.map(band => band.name)
 
     yield put(setSimilarBands(similarBands))
@@ -73,18 +63,7 @@ function* load() {
   try {
     yield put(getFestivals())
 
-    const post = {
-      method: 'post',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        topBands: topBandNames,
-        similarBands: similarBandNames
-      })
-    }
-
-    const url = 'http://localhost:9001/songkick/festivals'
-
-    festivals = yield fetch(url, post).then(response => response.json())
+    festivals = yield call(festivalsRequest, topBandNames, similarBandNames)
 
     const topFestivals = festivals.slice(0,10)
     const remainingFestivals = festivals.slice(10)
@@ -96,4 +75,48 @@ function* load() {
   }
 
   yield put(finalize())
+}
+
+const topBandsRequest = async (token) => {
+  const url = `http://localhost:9001/spotify/top-bands?${querystring.stringify({ token })}`
+
+  const options = {
+    json: true,
+    method: 'GET',
+  }
+
+  const response = await fetch(url, options)
+
+  return response.json()
+}
+
+const similarBandRequest = async (token, ids) => {
+  const url = `http://localhost:9001/spotify/similar-bands?${querystring.stringify({ token })}`
+
+  const options = {
+    method: 'post',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ ids })
+  }
+
+  const response = await fetch(url, options)
+
+  return response.json()
+}
+
+const festivalsRequest = async (topBands, similarBands) => {
+  const url = 'http://localhost:9001/songkick/festivals'
+
+  const post = {
+    method: 'post',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      topBands,
+      similarBands
+    })
+  }
+
+  const response = await fetch(url, post)
+
+  return response.json()
 }

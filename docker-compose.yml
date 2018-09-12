@@ -4,6 +4,8 @@ services:
     build: ./app
     depends_on:
       - spotify_backend
+    environment:
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
     ports:
       - 9000:3000
     restart: always
