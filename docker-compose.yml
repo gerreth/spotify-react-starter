@@ -21,6 +21,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_AUTH=${REDIS_AUTH}
       - REDIS_PORT=${REDIS_PORT}
+      - SONGKICK_API_KEY=${SONGKICK_API_KEY}
     ports:
       - 9001:3001
     restart: always

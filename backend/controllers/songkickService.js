@@ -7,7 +7,7 @@ export default class songkickService {
     const min_date = '2018-07-01'
     const max_date = '2019-06-30'
     const type = 'festival'
-    const api_key = 'VNvgkjz2uCB5y2G6'
+    const api_key = process.env.SONGKICK_API_KEY
 
     this.cities = {
       Amsterdam: '31366',
