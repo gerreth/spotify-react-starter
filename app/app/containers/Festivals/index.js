@@ -1,5 +1,5 @@
 /*
- * Bands
+ * Festivals
  */
 
 import { compose } from 'redux'
@@ -13,7 +13,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 /* eslint-disable react/prefer-stateless-function */
-class Bands extends React.Component {
+class Festivals extends React.Component {
 
   render() {
     return (
@@ -24,7 +24,7 @@ class Bands extends React.Component {
   }
 }
 
-Bands.propTypes = {
+Festivals.propTypes = {
 
 }
 
@@ -36,10 +36,9 @@ const withConnect = connect(
   mapStateToProps,
 );
 
-
 // const withReducer = injectReducer({})
 
 export default compose(
   // withReducer,
   withConnect,
-)(Bands)
+)(Festivals)
