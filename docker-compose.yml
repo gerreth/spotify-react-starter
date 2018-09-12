@@ -5,7 +5,7 @@ services:
     depends_on:
       - spotify_backend
     ports:
-      - "9000:3000"
+      - 9000:3000
     restart: always
     volumes:
       - ./app:/usr/src/app/
@@ -15,8 +15,12 @@ services:
     depends_on:
       - spotify_redis
       - spotify_mongodb
+    environment:
+      - HOST=35.242.148.98
+      - AUTH=DAK2X5nCcNvi
+      - PORT=6379
     ports:
-      - "9001:3001"
+      - 9001:3001
     restart: always
     volumes:
       - ./backend:/usr/src/app/
@@ -24,7 +28,7 @@ services:
   spotify_redis:
     image: redis:latest # 4
     ports:
-      - 6381:6379
+      - 6379:6379
 
   spotify_mongodb:
     image: mongo:latest # 4.0
@@ -36,5 +40,5 @@ services:
     volumes:
       - ./mongo/db:/mongo/db
     ports:
-      - 27019:27017
+      - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null

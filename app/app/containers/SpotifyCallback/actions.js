@@ -1,19 +1,19 @@
 /*
  *
- * Test actions
+ * Spotify callback actions
  *
  */
-import { SET_BANDS, LOGOUT } from './constants';
+import { INITIALIZE, SET_TOKEN } from './constants';
 
-export function setBands(bands) {
+export function initialize() {
   return {
-    type: SET_BANDS,
-    bands,
+    type: INITIALIZE,
   };
 }
 
-export function logout() {
+export function setToken(token) {
   return {
-    type: LOGOUT,
+    type: SET_TOKEN,
+    token
   };
 }

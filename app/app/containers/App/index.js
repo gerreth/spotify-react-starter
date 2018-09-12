@@ -15,7 +15,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 // Project imports
-import Header from 'containers/Header'
+import Header from 'components/Header'
 import HomePage from 'containers/HomePage/Loadable'
 import Login from 'containers/Login/Loadable'
 import Logout from 'containers/Logout'

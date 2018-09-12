@@ -1,8 +1,6 @@
 /*
- *
- * Test constants
- *
+ * Spotify callback
  */
 
-export const SET_BANDS = 'app/Test/SET_BANDS';
-export const LOGOUT = 'app/Test/LOGOUT';
+export const INITIALIZE = 'app/container/SpotifyCallback/INITIALIZE';
+export const SET_TOKEN = 'app/container/SpotifyCallback/SET_TOKEN';

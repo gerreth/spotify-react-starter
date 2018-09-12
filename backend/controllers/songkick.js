@@ -10,12 +10,7 @@ const songkick = new songkickService()
 // Get Festivals
 exports.festivals = async (req, res) => {
   const topBands = req.body.topBands
-  const similarBands = req.body.similarBands.reduce((similarBands, band) => {
-    if (topBands.indexOf(band) === -1) {
-      similarBands.push(band)
-    }
-    return similarBands
-  }, []) // if band is a top bands, skip this (no doubles?)
+  const similarBands = req.body.similarBands.filter(band => topBands.indexOf(band) === -1)
 
   const promises = Object.keys(songkick.cities).map(getFestivalsByCity) // get data either from cache or songkick
 

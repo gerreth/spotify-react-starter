@@ -5,32 +5,21 @@
  */
 
 import { fromJS } from 'immutable';
-import { SET_BANDS, LOGOUT } from './constants';
+import { INITIALIZE, SET_TOKEN } from './constants';
 
 export const initialState = fromJS({
-  loading: true,
   error: false,
-  auth: {
-    loggedIn: false
-  },
-  songkick: {
-    festivals: []
-  },
-  spotify: {
-    similarBands: [],
-    token: '',
-    topBands: []
-  },
+  loading: true,
+  token: null,
 });
 
 function spotifyCallbackReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_BANDS:
+    case INITIALIZE:
+      return state;
+    case SET_TOKEN:
       return state
-        .set('error', false)
-        .setIn(['spotify','topBands'], action.bands);
-    case LOGOUT:
-      return initialState;
+        .set('token', action.token);
     default:
       return state;
   }

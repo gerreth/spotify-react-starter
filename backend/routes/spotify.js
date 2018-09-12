@@ -26,6 +26,17 @@ router.get('/similar-bands', (req, res, next) => {
   })
 })
 
+router.post('/similar-bands', (req, res, next) => {
+  const ids = req.body.ids
+  const token = req.query.token
+
+  new spotifyService(token).getSimilarBands(ids).then(similarBands => {
+    return res.send(similarBands)
+  }).catch(error => {
+    res.send({})
+  })
+})
+
 /*
  * Get top bands for user (new)
  */

@@ -1,14 +1,18 @@
 import redis from 'redis'
 
-const host = 'spotify_redis'
-const port = 6379
+const host = process.env.HOST || 'spotify_redis'
+const auth = process.env.AUTH || ''
+const port = process.env.PORT || 6379
 
 class Redis {
   constructor() {
     const client = redis.createClient(port, host)
+    if (auth !== '') {
+      client.auth(auth)
+    }
 
     client.on('connect', () => {
-      console.log(':: Redis client connected');
+      console.log(':: Redis client connected with ' + host);
     })
 
     client.on('error', (err) => {

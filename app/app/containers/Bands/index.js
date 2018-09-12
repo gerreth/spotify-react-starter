@@ -1,5 +1,5 @@
 /*
- * HomePage
+ * Bands
  */
 
 import { compose } from 'redux'
@@ -12,8 +12,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
+import reducer from './reducer';
+
 /* eslint-disable react/prefer-stateless-function */
-class HomePage extends React.Component {
+class Bands extends React.Component {
 
   render() {
     return (
@@ -24,7 +26,7 @@ class HomePage extends React.Component {
   }
 }
 
-HomePage.propTypes = {
+Bands.propTypes = {
 
 }
 
@@ -37,9 +39,9 @@ const withConnect = connect(
 );
 
 
-// const withReducer = injectReducer({})
+const withReducer = injectReducer({ key: 'bands', reducer });
 
 export default compose(
-  // withReducer,
+  withReducer,
   withConnect,
-)(HomePage)
+)(Bands)
