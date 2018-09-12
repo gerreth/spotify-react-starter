@@ -16,9 +16,9 @@ services:
       - spotify_redis
       - spotify_mongodb
     environment:
-      - HOST=35.242.148.98
-      - AUTH=DAK2X5nCcNvi
-      - PORT=6379
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_AUTH=${REDIS_AUTH}
+      - REDIS_PORT=${REDIS_PORT}
     ports:
       - 9001:3001
     restart: always

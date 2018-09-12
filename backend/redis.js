@@ -1,8 +1,8 @@
 import redis from 'redis'
 
-const host = process.env.HOST || 'spotify_redis'
-const auth = process.env.AUTH || ''
-const port = process.env.PORT || 6379
+const host = process.env.REDIS_HOST || 'spotify_redis'
+const auth = process.env.REDIS_AUTH || ''
+const port = process.env.REDIS_PORT || 6379
 
 class Redis {
   constructor() {
