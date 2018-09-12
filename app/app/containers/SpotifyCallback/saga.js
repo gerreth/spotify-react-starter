@@ -3,6 +3,8 @@
  */
 import { call, fork, put, select, takeLatest } from 'redux-saga/effects'
 import { INITIALIZE } from './constants'
+import 'whatwg-fetch';
+import querystring from 'querystring'
 
 import { getSimilarBands, getTopBands } from '../Bands/actions'
 import { setSimilarBands, setTopBands } from '../Bands/actions'
@@ -13,9 +15,6 @@ import { setFestivalsError } from '../Festivals/actions'
 
 const selectToken = state => state.toJS().spotify.token;
 
-import 'whatwg-fetch';
-import querystring from 'querystring'
-
 /**
  * Root saga manages watcher lifecycle
  */
@@ -23,16 +22,12 @@ export default function* initialize() {
   yield takeLatest(INITIALIZE, load)
 }
 
-function* apiCall(url, options) {
-  console.log(url)
-  console.log(options)
-  yield fetch(url, options).then(response => response.json())
-}
-
 function* load() {
   let festivals
-  let top
-  let similar
+  let topBands
+  let topBandNames
+  let similarBands
+  let similarBandNames
 
   const token = yield select(selectToken);
 
@@ -44,8 +39,9 @@ function* load() {
       method: 'GET',
     }
 
-    top = yield fetch(url, options).then(response => response.json())
-    yield put(setTopBands(top))
+    topBands = yield fetch(url, options).then(response => response.json())
+    topBandNames = topBands.map(band => band.name)
+    yield put(setTopBands(topBands))
   } catch (error) {
     yield put(setTopBandsError())
     throw(error)
@@ -54,7 +50,7 @@ function* load() {
   try {
     yield put(getSimilarBands())
 
-    const ids = top.map(band => band.id)
+    const ids = topBands.map(band => band.id)
     const options = {
       method: 'post',
       headers: {'Content-Type':'application/json'},
@@ -62,8 +58,12 @@ function* load() {
     }
 
     const url = `http://localhost:9001/spotify/similar-bands?${querystring.stringify({ token })}`
-    similar = yield fetch(url, options).then(response => response.json())
-    yield put(setSimilarBands(similar))
+    similarBands = yield fetch(url, options).then(response => response.json())
+
+    similarBands = similarBands.filter(band => topBandNames.indexOf(band.name) === -1)
+    similarBandNames = similarBands.map(band => band.name)
+
+    yield put(setSimilarBands(similarBands))
   } catch (error) {
     yield put(setSimilarBandsError())
     throw(error)
@@ -72,26 +72,16 @@ function* load() {
   try {
     yield put(getFestivals())
 
-    const topBands = top.reduce((carry, band) => {
-      carry.push(band.name)
-      return carry
-    }, [])
-
-    const similarBands = similar.reduce((carry, band) => {
-      carry.push(band.name)
-      return carry
-    }, [])
-
     console.log('!!! duplicates !!!')
-    console.log(topBands.sort())
-    console.log(similarBands.sort())
+    console.log(topBandNames.sort())
+    console.log(similarBandNames.sort())
 
     const post = {
       method: 'post',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        topBands,
-        similarBands
+        topBands: topBandNames,
+        similarBands: similarBandNames
       })
     }
 
