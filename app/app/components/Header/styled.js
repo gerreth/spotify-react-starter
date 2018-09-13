@@ -5,7 +5,7 @@ export const HeaderWrapper = styled.div`
   background: #FFFFFF;
   ${'' /* box-shadow: 0 -1px 3px rgba(0,0,0,0.25); */}
   border-bottom: 1px solid #d9dadc;
-  line-height: 36px;
+  line-height: ${2*18}px;
   padding: 18px;
   position: absolute;
   top: 0;

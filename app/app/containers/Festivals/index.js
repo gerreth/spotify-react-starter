@@ -10,35 +10,43 @@ import injectReducer from 'utils/injectReducer'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components'
+
+import reducer from './reducer';
+import { ContainerWrapper } from './styled'
+import { allFestivalsSelector } from './selectors'
 
 /* eslint-disable react/prefer-stateless-function */
 class Festivals extends React.Component {
 
   render() {
+    console.log(this.props.all)
     return (
-      <div>
+      <ContainerWrapper>
         Test
-      </div>
+      </ContainerWrapper>
     )
   }
 }
 
 Festivals.propTypes = {
-
+  all: PropTypes.array,
+  // festivals: PropTypes.shape({
+  //   remaining: PropTypes.array,
+  //   top: PropTypes.array,
+  // }),
 }
 
 const mapStateToProps = createStructuredSelector({
-
+  all: allFestivalsSelector(),
 })
 
 const withConnect = connect(
   mapStateToProps,
 );
 
-// const withReducer = injectReducer({})
+const withReducer = injectReducer({ key: 'festivals', reducer });
 
 export default compose(
-  // withReducer,
+  withReducer,
   withConnect,
 )(Festivals)

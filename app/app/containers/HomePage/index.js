@@ -12,24 +12,28 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
+import { ContainerWrapper } from './styled'
+import { highlightFestivalsSelector } from '../Festivals/selectors'
+
 /* eslint-disable react/prefer-stateless-function */
 class HomePage extends React.Component {
 
   render() {
+    console.log(this.props.highlight)
     return (
-      <div>
+      <ContainerWrapper>
         Test
-      </div>
+      </ContainerWrapper>
     )
   }
 }
 
 HomePage.propTypes = {
-
+  highlight: PropTypes.array,
 }
 
 const mapStateToProps = createStructuredSelector({
-
+  highlight: highlightFestivalsSelector(),
 })
 
 const withConnect = connect(

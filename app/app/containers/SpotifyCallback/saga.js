@@ -65,10 +65,10 @@ function* load() {
 
     festivals = yield call(festivalsRequest, topBandNames, similarBandNames)
 
-    const topFestivals = festivals.slice(0,10)
-    const remainingFestivals = festivals.slice(10)
+    const highlightFestivals = festivals.filter(festival => festival.highlight)
+    const similarFestivals = festivals.filter(festival => !festival.highlight)
 
-    yield put(setFestivals(topFestivals, remainingFestivals))
+    yield put(setFestivals(highlightFestivals, similarFestivals))
   } catch (error) {
     yield put(setFestivalsError())
     throw(error)

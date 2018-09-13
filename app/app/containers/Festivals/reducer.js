@@ -8,8 +8,8 @@ import { GET_FESTIVALS, SET_FESTIVALS, SET_FESTIVALS_ERROR } from './constants';
 export const initialState = fromJS({
   error: false,
   loading: false,
-  remaining: [],
-  top: [],
+  highlight: [],
+  similar: [],
 });
 
 function festivalsReducer(state = initialState, action) {
@@ -20,8 +20,8 @@ function festivalsReducer(state = initialState, action) {
     case SET_FESTIVALS:
       return state
         .set('loading', false)
-        .set('remaining', action.remaining)
-        .set('top', action.top);
+        .set('highlight', action.highlight)
+        .set('similar', action.similar);
     case SET_FESTIVALS_ERROR:
       return state
         .set('loading', false)
