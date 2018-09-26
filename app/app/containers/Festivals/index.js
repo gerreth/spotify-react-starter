@@ -15,14 +15,32 @@ import reducer from './reducer';
 import { ContainerWrapper } from './styled'
 import { allFestivalsSelector } from './selectors'
 
+import Festival from 'components/Festival'
+
 /* eslint-disable react/prefer-stateless-function */
 class Festivals extends React.Component {
 
   render() {
-    console.log(this.props.festivals)
+    const {
+      festivals
+    } = this.props
+
+    console.log(festivals)
+
+    const FestivalsList = festivals.map(festival => {
+      return (
+        <Festival
+          bands={festival.artists}
+          date={festival.date}
+          name={festival.name}
+        />
+      )
+    })
+
     return (
       <ContainerWrapper>
-        Test
+        <h2 style={{ fontSize: '2.5em', fontWeight: 'normal', margin: '0 0 36px 0' }}>All festivals</h2>
+        {FestivalsList}
       </ContainerWrapper>
     )
   }

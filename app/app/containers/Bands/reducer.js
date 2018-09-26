@@ -38,7 +38,7 @@ function bandsReducer(state = initialState, action) {
     case SET_TOP_BANDS:
       return state
         .set('loading', false)
-        .set('top', setTopBands(action))
+        .set('top', action.top)
     case SET_TOP_BANDS_ERROR:
       return state
         .set('loading', false)
@@ -49,10 +49,6 @@ function bandsReducer(state = initialState, action) {
 }
 
 export default bandsReducer
-
-const setTopBands = (action) => {
-  return action.top
-}
 
 const setSimilarBands = (state, action) => {
   const topNames = state.get('top').map(band => band.name)

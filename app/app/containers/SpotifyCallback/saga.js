@@ -24,7 +24,7 @@ import {
 import { finalize } from './actions'
 
 import { spotifyTokenSelector } from './selectors'
-import { similarBandNames, topBandNames } from '../Bands/selectors'
+import { similarBandNames, topBandNames, topBandsIdSelector } from '../Bands/selectors'
 
 /**
  * Root saga manages watcher lifecycle
@@ -34,38 +34,34 @@ export default function* initialize() {
 }
 
 function* load() {
-  var festivals
-  var topBands
-  var similarBands
-
   const token = yield select(spotifyTokenSelector())
 
   try {
     yield put(getTopBands())
-    topBands = yield call(topBandsRequest, token)
+    const topBands = yield call(topBandsRequest, token)
     yield put(setTopBands(topBands))
   } catch (error) {
     yield put(setTopBandsError())
     throw(error)
   }
 
-  const ids = topBands.map(band => band.id)
+  const ids = yield select(topBandsIdSelector())
 
   try {
     yield put(getSimilarBands())
-    similarBands = yield call(similarBandRequest, token, ids)
+    const similarBands = yield call(similarBandRequest, token, ids)
     yield put(setSimilarBands(similarBands))
   } catch (error) {
     yield put(setSimilarBandsError())
     throw(error)
   }
 
-  const similar = yield select(similarBandNames())
-  const top = yield select(topBandNames())
+  const similarNames = yield select(similarBandNames())
+  const topNames = yield select(topBandNames())
 
   try {
     yield put(getFestivals())
-    festivals = yield call(festivalsRequest, top, similar)
+    const festivals = yield call(festivalsRequest, topNames, similarNames)
     yield put(setFestivals(festivals))
   } catch (error) {
     yield put(setFestivalsError())
