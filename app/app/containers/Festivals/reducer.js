@@ -20,8 +20,8 @@ function festivalsReducer(state = initialState, action) {
     case SET_FESTIVALS:
       return state
         .set('loading', false)
-        .set('highlight', action.highlight)
-        .set('similar', action.similar);
+        .set('highlight', action.festivals.filter(festival => festival.highlight))
+        .set('similar', action.festivals.filter(festival => !festival.highlight));
     case SET_FESTIVALS_ERROR:
       return state
         .set('loading', false)

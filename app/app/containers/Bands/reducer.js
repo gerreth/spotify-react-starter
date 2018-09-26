@@ -2,45 +2,59 @@
  * Bands reducer
  */
 
-import { fromJS } from 'immutable';
-import { GET_SIMILAR_BANDS, GET_TOP_BANDS } from './constants';
-import { SET_SIMILAR_BANDS, SET_TOP_BANDS } from './constants';
-import { SET_SIMILAR_BANDS_ERROR, SET_TOP_BANDS_ERROR } from './constants';
+import { fromJS } from 'immutable'
+import {
+  GET_SIMILAR_BANDS,
+  GET_TOP_BANDS,
+  SET_SIMILAR_BANDS,
+  SET_TOP_BANDS,
+  SET_SIMILAR_BANDS_ERROR,
+  SET_TOP_BANDS_ERROR,
+} from './constants'
 
 export const initialState = fromJS({
   error: false,
   loading: false,
   similar: [],
   top: []
-});
+})
 
 function bandsReducer(state = initialState, action) {
   switch (action.type) {
     case GET_SIMILAR_BANDS:
       return state
-        .set('loading', true);
+        .set('loading', true)
     case SET_SIMILAR_BANDS:
       return state
         .set('loading', false)
-        .set('similar', action.similar);
+        .set('similar', setSimilarBands(state, action))
     case SET_SIMILAR_BANDS_ERROR:
       return state
         .set('loading', false)
-        .set('error', true);
+        .set('error', true)
     case GET_TOP_BANDS:
       return state
-        .set('loading', true);
+        .set('loading', true)
     case SET_TOP_BANDS:
       return state
         .set('loading', false)
-        .set('top', action.top);
+        .set('top', setTopBands(action))
     case SET_TOP_BANDS_ERROR:
       return state
         .set('loading', false)
-        .set('error', true);
+        .set('error', true)
     default:
-      return state;
+      return state
   }
 }
 
-export default bandsReducer;
+export default bandsReducer
+
+const setTopBands = (action) => {
+  return action.top
+}
+
+const setSimilarBands = (state, action) => {
+  const topNames = state.get('top').map(band => band.name)
+  return action.similar.filter(band => topNames.indexOf(band.name) === -1)
+}

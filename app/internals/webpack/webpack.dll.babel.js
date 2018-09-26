@@ -39,6 +39,9 @@ module.exports = require('./webpack.base.babel')({
       name: '[name]',
       path: join(outputPath, '[name].json'),
     }),
+    new webpack.DefinePlugin({
+      'SPOTIFY_CLIENT_ID': JSON.stringify(process.env.SPOTIFY_CLIENT_ID)
+    })
   ],
   performance: {
     hints: false,

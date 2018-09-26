@@ -3,18 +3,28 @@
  */
 import { call, fork, put, select, takeLatest } from 'redux-saga/effects'
 import { FINALIZE, INITIALIZE } from './constants'
-import 'whatwg-fetch';
+import 'whatwg-fetch'
 import querystring from 'querystring'
 
-import { getSimilarBands, getTopBands } from '../Bands/actions'
-import { setSimilarBands, setTopBands } from '../Bands/actions'
-import { setSimilarBandsError, setTopBandsError } from '../Bands/actions'
-import { getFestivals } from '../Festivals/actions'
-import { setFestivals } from '../Festivals/actions'
-import { setFestivalsError } from '../Festivals/actions'
+import {
+  getSimilarBands,
+  getTopBands,
+  setSimilarBands,
+  setTopBands,
+  setSimilarBandsError,
+  setTopBandsError
+} from '../Bands/actions'
+
+import {
+  getFestivals,
+  setFestivals,
+  setFestivalsError
+} from '../Festivals/actions'
+
 import { finalize } from './actions'
 
-const selectToken = state => state.toJS().spotify.token;
+import { spotifyTokenSelector } from './selectors'
+import { similarBandNames, topBandNames } from '../Bands/selectors'
 
 /**
  * Root saga manages watcher lifecycle
@@ -24,51 +34,39 @@ export default function* initialize() {
 }
 
 function* load() {
-  let festivals
-  let topBands
-  let topBandNames
-  let similarBands
-  let similarBandNames
+  var festivals
+  var topBands
+  var similarBands
 
-  const token = yield select(selectToken);
+  const token = yield select(spotifyTokenSelector())
 
   try {
     yield put(getTopBands())
-
     topBands = yield call(topBandsRequest, token)
-    topBandNames = topBands.map(band => band.name)
-
     yield put(setTopBands(topBands))
   } catch (error) {
     yield put(setTopBandsError())
     throw(error)
   }
 
+  const ids = topBands.map(band => band.id)
+
   try {
     yield put(getSimilarBands())
-
-    const ids = topBands.map(band => band.id)
-
     similarBands = yield call(similarBandRequest, token, ids)
-
-    similarBands = similarBands.filter(band => topBandNames.indexOf(band.name) === -1) // maybe better do this on the backend
-    similarBandNames = similarBands.map(band => band.name)
-
     yield put(setSimilarBands(similarBands))
   } catch (error) {
     yield put(setSimilarBandsError())
     throw(error)
   }
 
+  const similar = yield select(similarBandNames())
+  const top = yield select(topBandNames())
+
   try {
     yield put(getFestivals())
-
-    festivals = yield call(festivalsRequest, topBandNames, similarBandNames)
-
-    const highlightFestivals = festivals.filter(festival => festival.highlight)
-    const similarFestivals = festivals.filter(festival => !festival.highlight)
-
-    yield put(setFestivals(highlightFestivals, similarFestivals))
+    festivals = yield call(festivalsRequest, top, similar)
+    yield put(setFestivals(festivals))
   } catch (error) {
     yield put(setFestivalsError())
     throw(error)
@@ -77,7 +75,10 @@ function* load() {
   yield put(finalize())
 }
 
-const topBandsRequest = async (token) => {
+/**
+ *  Requests
+ */
+const topBandsRequest = async(token) => {
   const url = `http://localhost:9001/spotify/top-bands?${querystring.stringify({ token })}`
 
   const options = {
@@ -90,7 +91,7 @@ const topBandsRequest = async (token) => {
   return response.json()
 }
 
-const similarBandRequest = async (token, ids) => {
+const similarBandRequest = async(token, ids) => {
   const url = `http://localhost:9001/spotify/similar-bands?${querystring.stringify({ token })}`
 
   const options = {
@@ -104,7 +105,7 @@ const similarBandRequest = async (token, ids) => {
   return response.json()
 }
 
-const festivalsRequest = async (topBands, similarBands) => {
+const festivalsRequest = async(topBands, similarBands) => {
   const url = 'http://localhost:9001/songkick/festivals'
 
   const post = {

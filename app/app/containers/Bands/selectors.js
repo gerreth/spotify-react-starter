@@ -9,6 +9,22 @@ const bandsSelector = state => state.get('bands', initialState)
 /**
  * Other specific selectors
  */
+const topBandNames = () =>
+ createSelector(bandsSelector, substate => {
+   const top = substate.get('top')
+   const names = top.map(band => band.name)
+
+   return names
+ })
+
+const similarBandNames = () =>
+  createSelector(bandsSelector, substate => {
+    const similar = substate.get('similar')
+    const names = similar.map(band => band.name)
+
+    return names
+  })
+
 const allBandsSelector = () =>
   createSelector(bandsSelector, substate => {
     return {
@@ -19,5 +35,7 @@ const allBandsSelector = () =>
 
 export default bandsSelector
 export {
-  allBandsSelector
+  allBandsSelector,
+  similarBandNames,
+  topBandNames,
 }

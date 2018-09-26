@@ -19,7 +19,7 @@ import { allFestivalsSelector } from './selectors'
 class Festivals extends React.Component {
 
   render() {
-    console.log(this.props.all)
+    console.log(this.props.festivals)
     return (
       <ContainerWrapper>
         Test
@@ -29,15 +29,11 @@ class Festivals extends React.Component {
 }
 
 Festivals.propTypes = {
-  all: PropTypes.array,
-  // festivals: PropTypes.shape({
-  //   remaining: PropTypes.array,
-  //   top: PropTypes.array,
-  // }),
+  festivals: PropTypes.array,
 }
 
 const mapStateToProps = createStructuredSelector({
-  all: allFestivalsSelector(),
+  festivals: allFestivalsSelector(),
 })
 
 const withConnect = connect(

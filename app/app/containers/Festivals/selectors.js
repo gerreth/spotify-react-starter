@@ -10,17 +10,14 @@ const festivalsSelector = state => state.get('festivals', initialState)
 /**
  * Other specific selectors
  */
-// const allFestivalsSelector = () =>
-//   createSelector(festivalsSelector, substate => {
-//     return {
-//       remaining: substate.get('remaining'),
-//       top: substate.get('top')
-//     }
-//   })
-
 const highlightFestivalsSelector = () =>
-  createSelector(festivalsSelector, substate =>
-    substate.get('highlight').sort(sortByDate)
+  createSelector(festivalsSelector, substate => {
+      if (!Boolean(substate.get('highlight') instanceof Array)) return []
+
+      const highlight = substate.get('highlight')
+
+      return highlight.sort(sortByDate)
+    }
   )
 
 const allFestivalsSelector = () =>

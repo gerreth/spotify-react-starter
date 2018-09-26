@@ -9,11 +9,10 @@ export function getFestivals() {
   };
 }
 
-export function setFestivals(highlight, similar) {
+export function setFestivals(festivals) {
   return {
     type: SET_FESTIVALS,
-    highlight,
-    similar,
+    festivals,
   };
 }
 

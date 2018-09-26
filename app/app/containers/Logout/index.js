@@ -14,6 +14,8 @@ import { compose } from 'redux';
 
 import injectReducer from 'utils/injectReducer';
 
+import { ContainerWrapper } from './styled'
+
 /* eslint-disable react/prefer-stateless-function */
 export class Logout extends React.Component {
 
@@ -22,7 +24,11 @@ export class Logout extends React.Component {
   }
 
   render() {
-    return <Redirect to='/' />
+    return (
+      <ContainerWrapper>
+        Test
+      </ContainerWrapper>
+    )
   }
 
 }
