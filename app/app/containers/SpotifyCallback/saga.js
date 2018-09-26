@@ -4,7 +4,6 @@
 import { call, fork, put, select, takeLatest } from 'redux-saga/effects'
 import { FINALIZE, INITIALIZE } from './constants'
 import 'whatwg-fetch'
-import querystring from 'querystring'
 
 import {
   getSimilarBands,
@@ -75,20 +74,18 @@ function* load() {
  *  Requests
  */
 const topBandsRequest = async(token) => {
-  const url = `http://localhost:9001/spotify/top-bands?${querystring.stringify({ token })}`
+  const url = `http://localhost:9001/spotify/top-bands?token=${token}`
 
   const options = {
     json: true,
     method: 'GET',
   }
 
-  const response = await fetch(url, options)
-
-  return response.json()
+  return (await fetch(url, options)).json()
 }
 
 const similarBandRequest = async(token, ids) => {
-  const url = `http://localhost:9001/spotify/similar-bands?${querystring.stringify({ token })}`
+  const url = `http://localhost:9001/spotify/similar-bands?token=${token}`
 
   const options = {
     method: 'post',
@@ -96,15 +93,13 @@ const similarBandRequest = async(token, ids) => {
     body: JSON.stringify({ ids })
   }
 
-  const response = await fetch(url, options)
-
-  return response.json()
+  return (await fetch(url, options)).json()
 }
 
 const festivalsRequest = async(topBands, similarBands) => {
   const url = 'http://localhost:9001/songkick/festivals'
 
-  const post = {
+  const options = {
     method: 'post',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
@@ -113,7 +108,5 @@ const festivalsRequest = async(topBands, similarBands) => {
     })
   }
 
-  const response = await fetch(url, post)
-
-  return response.json()
+  return (await fetch(url, options)).json()
 }
