@@ -11,12 +11,17 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import { theme } from 'theme/'
+import { formatDate } from 'helper'
 
 import Band from 'components/Band'
 
 // Styled components
 import {
-  FestivalWrapper
+  FestivalBandsWrapper,
+  FestivalDate,
+  FestivalLocation,
+  FestivalName,
+  FestivalWrapper,
 } from './styled'
 
 /* eslint-disable react/prefer-stateless-function */
@@ -25,6 +30,7 @@ export default class Festival extends React.Component {
     const {
       bands,
       date,
+      location,
       name,
     } = this.props
 
@@ -40,9 +46,18 @@ export default class Festival extends React.Component {
 
     return (
       <FestivalWrapper>
-        <p style={{ color: '#999', fontSize: '.8em', lineHeight: `${theme.sizes.base*3}px` }}>{date.start} - {date.end}</p>
-        <p style={{ fontSize: '1.5em', lineHeight: `${theme.sizes.base*7}px` }}>{name}</p>
-        <div style={{ lineHeight: `${theme.sizes.base*4}px` }}>{BandsList}</div>
+        <FestivalLocation>
+          {location.city}, {location.country}
+        </FestivalLocation>
+        <FestivalDate>
+          {formatDate(date.start)} - {formatDate(date.end)}
+        </FestivalDate>
+        <FestivalName>
+          {name}
+        </FestivalName>
+        <FestivalBandsWrapper>
+          {BandsList}
+        </FestivalBandsWrapper>
       </FestivalWrapper>
     )
   }
@@ -53,6 +68,10 @@ Festival.propTypes = {
   date: PropTypes.shape({
     start: PropTypes.string.isRequired,
     end: PropTypes.string.isRequired
+  }).isRequired,
+  location: PropTypes.shape({
+    country: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired
   }).isRequired,
   name: PropTypes.string.isRequired,
 }

@@ -28,6 +28,7 @@ class HomePage extends React.Component {
           bands={festival.artists}
           date={festival.date}
           key={festival.name}
+          location={festival.location}
           name={festival.name}
         />
       )

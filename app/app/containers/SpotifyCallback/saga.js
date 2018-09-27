@@ -44,9 +44,8 @@ function* load() {
     throw(error)
   }
 
-  const ids = yield select(topBandsIdSelector())
-
   try {
+    const ids = yield select(topBandsIdSelector())
     yield put(getSimilarBands())
     const similarBands = yield call(similarBandRequest, token, ids)
     yield put(setSimilarBands(similarBands))
@@ -55,10 +54,9 @@ function* load() {
     throw(error)
   }
 
-  const similarNames = yield select(similarBandNames())
-  const topNames = yield select(topBandNames())
-
   try {
+    const similarNames = yield select(similarBandNames())
+    const topNames = yield select(topBandNames())
     yield put(getFestivals())
     const festivals = yield call(festivalsRequest, topNames, similarNames)
     yield put(setFestivals(festivals))

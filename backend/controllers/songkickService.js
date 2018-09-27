@@ -1,6 +1,8 @@
 import axios from 'axios'
 import client from '../redis';
 
+const days = 31;
+
 export default class songkickService {
 
   constructor() {
@@ -42,7 +44,7 @@ export default class songkickService {
   async makeRequest(url) {
     const response = await axios.get(url).then(response => response.data)
     client.set(url, JSON.stringify(response))
-    client.expire(url, 24*60*60)
+    client.expire(url, days*24*60*60)
     return response
   }
 
@@ -57,7 +59,7 @@ export default class songkickService {
     }
 
     if (cache !== null) {
-      console.log('from cache')
+      console.log(`Get festivals from cache ({$days} days)`)
       return cache
     } else {
       let response
@@ -67,7 +69,7 @@ export default class songkickService {
       } catch(error) {
         console.log(error.body)
       }
-      console.log('from api')
+      console.log('Get festivals from api')
       return response
     }
   }
