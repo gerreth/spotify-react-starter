@@ -1,7 +1,6 @@
 /*
  * Festivals
  */
-
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -32,6 +31,7 @@ class Festivals extends React.Component {
         <Festival
           bands={festival.artists}
           date={festival.date}
+          key={festival.name}
           name={festival.name}
         />
       )

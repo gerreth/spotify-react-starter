@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import { theme } from 'theme/'
+
 // Styled components
 import {
   BandWrapper
@@ -21,12 +23,12 @@ const styles = {
     whiteSpace: 'pre'
   },
   highlight: {
-    background: '#FEE837',
+    background: theme.colors.highlight,
     fontWeight: 'bold',
     whiteSpace: 'pre'
   },
   similar: {
-    background: '#FEE837',
+    background: theme.colors.highlight,
     whiteSpace: 'pre'
   }
 }
